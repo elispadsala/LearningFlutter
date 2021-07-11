@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_catalog/utilities/routes.dart';
 
 
- class LoginPage extends StatelessWidget {
+ class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String name = "";
+  bool changeButton = false;
+
    @override
    Widget build(BuildContext context) {
      return Material(
@@ -13,7 +21,8 @@ import 'package:flutter_catalog/utilities/routes.dart';
                Image.asset("assets/images/login_image.png" ,
                fit: BoxFit.cover,
                ),
-               Text("welcome",
+               Text(
+                 "welcome $name",
                style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -31,6 +40,10 @@ import 'package:flutter_catalog/utilities/routes.dart';
                       hintText: "Enter Username",
                       labelText: "Username",
                     ),
+                      onChanged: (value) {
+                         name = value;
+                         setState(() {});
+                      },
                   ),
                    TextFormField(
                      obscureText: true,
@@ -42,13 +55,47 @@ import 'package:flutter_catalog/utilities/routes.dart';
                    SizedBox(
                      height: 40,
                    ),
-                   ElevatedButton(
-                     child: Text("Login"),
-                     style: TextButton.styleFrom(minimumSize: Size(130,40)),
-                     onPressed: () {
-                       Navigator.pushNamed(context,MyRoutes.homeRoute);
-                     },
-                     ),
+
+                  InkWell(
+                    onTap: () async {
+                      setState(() {
+                        changeButton=true;
+                      });
+
+                      await Future.delayed(Duration(seconds: 1));
+                      Navigator.pushNamed(context,MyRoutes.homeRoute); 
+                    },
+                   child: AnimatedContainer(
+                      duration: Duration(seconds: 1),
+                      width: changeButton  ? 50: 150,
+                      height: 50,
+                      alignment: Alignment.center,
+                      child: changeButton
+                      ? Icon(
+                        Icons.done, color: Colors.white,
+                      ) 
+                      
+                      : Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white , fontSize: 18,fontWeight: FontWeight.bold),
+                         ),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple,
+                        //shape: changeButton
+                          //? BoxShape.circle
+                          //: BoxShape.rectangle,
+                       borderRadius: BorderRadius.circular(changeButton?50:8)
+                      ),
+                    ),
+                  )
+
+                  // ElevatedButton(
+                    // child: Text("Login"),
+                    // style: TextButton.styleFrom(minimumSize: Size(130,40)),
+                    // onPressed: () {
+                     //  Navigator.pushNamed(context,MyRoutes.homeRoute);
+                     //},
+                    // ),
                   ],),
                 )
              ],
@@ -56,4 +103,4 @@ import 'package:flutter_catalog/utilities/routes.dart';
           ),
        );
    }
- }
+}
